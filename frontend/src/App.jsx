@@ -2,6 +2,9 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotesPage from "./pages/NotesPage";
+import CreateNotePage from "./pages/CreateNotePage";
+import ViewNotePage from "./pages/ViewNotePage";
+import AppShell from "./components/AppShell";
 import { isAuthenticated } from "./utils/auth";
 
 function ProtectedRoute({ children }) {
@@ -30,13 +33,16 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
 
       <Route
-        path="/notes"
         element={
           <ProtectedRoute>
-            <NotesPage />
+            <AppShell />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/notes" element={<NotesPage />} />
+        <Route path="/create" element={<CreateNotePage />} />
+        <Route path="/notes/:id" element={<ViewNotePage />} />
+      </Route>
     </Routes>
   );
 }
