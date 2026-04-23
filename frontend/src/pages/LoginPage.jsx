@@ -70,7 +70,7 @@ function LoginPage() {
                 <input
                   name="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="Email Address"
                   className="flex-1 bg-transparent outline-none px-3 text-sm placeholder:text-white/30"
                   value={form.email}
                   onChange={handleChange}
@@ -86,7 +86,7 @@ function LoginPage() {
                 <input
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
+                  placeholder="Password"
                   className="flex-1 bg-transparent outline-none px-3 text-sm placeholder:text-white/30"
                   value={form.password}
                   onChange={handleChange}
