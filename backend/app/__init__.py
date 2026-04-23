@@ -1,9 +1,21 @@
 from flask import Flask, jsonify
+from sqlalchemy import inspect, text
 
 from app.config import Config
 from app.extensions import db, cors
 from app.routes.auth import auth_bp
 from app.routes.notes import notes_bp
+
+
+def drop_legacy_note_preview_column():
+    inspector = inspect(db.engine)
+    note_columns = {column["name"] for column in inspector.get_columns("notes")}
+
+    if "content_preview" not in note_columns:
+        return
+
+    db.session.execute(text("ALTER TABLE notes DROP COLUMN content_preview"))
+    db.session.commit()
 
 
 def create_app():
@@ -33,5 +45,6 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        drop_legacy_note_preview_column()
 
     return app

@@ -20,13 +20,7 @@ function NoteCard({ note, onView, onEdit, onDelete }) {
         </div>
       </div>
 
-      <p className="text-sm leading-6 text-white/60 line-clamp-3 min-h-[72px] mt-3">
-        {note.is_password_protected
-          ? "This note is password protected. Preview hidden."
-          : note.content_preview || "No preview available."}
-      </p>
-
-      <div className="mt-2 flex items-center gap-2 text-xs text-white/45">
+      <div className="mt-3 flex items-center gap-2 text-xs text-white/45">
         <FiCalendar className="text-[13px]" />
         <span>{new Date(note.created_at).toLocaleString("ro-RO")}</span>
       </div>

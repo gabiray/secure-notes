@@ -133,7 +133,7 @@ function CreateNotePage() {
           </div>
 
           <p className="mt-4 text-xs text-white/40">
-            Tip: You can use Markdown formatting in your notes.
+            Tip: You can add a password to your notes for extra security.
           </p>
         </div>
       </div>

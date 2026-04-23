@@ -22,7 +22,6 @@ class Note(db.Model):
     ciphertext = db.Column(db.Text, nullable=False)
     nonce = db.Column(db.String(255), nullable=False)
     note_hash = db.Column(db.String(255), nullable=False)
-    content_preview = db.Column(db.String(200), nullable=True)
 
     is_password_protected = db.Column(db.Boolean, default=False, nullable=False)
     note_password_hash = db.Column(db.String(255), nullable=True)

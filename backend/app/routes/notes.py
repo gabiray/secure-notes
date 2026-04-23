@@ -30,13 +30,6 @@ def build_note_response(note, content=None, locked=False):
     return response
 
 
-def make_preview(content, limit=140):
-    clean = " ".join(content.strip().split())
-    if len(clean) <= limit:
-        return clean
-    return clean[:limit].rstrip() + "..."
-
-
 @notes_bp.route("/", methods=["GET"])
 @jwt_required
 def get_notes():
@@ -52,7 +45,6 @@ def get_notes():
             "id": note.id,
             "title": note.title,
             "is_password_protected": note.is_password_protected,
-            "content_preview": None if note.is_password_protected else note.content_preview,
             "created_at": note.created_at.isoformat(),
             "updated_at": note.updated_at.isoformat(),
         }
@@ -79,22 +71,18 @@ def create_note():
 
     is_password_protected = bool(note_password)
     note_password_hash = None
-    preview = None
 
     if is_password_protected:
         note_password_hash = bcrypt.hashpw(
             note_password.encode("utf-8"),
             bcrypt.gensalt()
         ).decode("utf-8")
-    else:
-        preview = make_preview(content)
 
     note = Note(
         title=title,
         ciphertext=ciphertext,
         nonce=nonce,
         note_hash=note_hash,
-        content_preview=preview,
         user_id=g.current_user.id,
         is_password_protected=is_password_protected,
         note_password_hash=note_password_hash,
@@ -148,13 +136,11 @@ def update_note(note_id):
 
     ciphertext, nonce = encrypt_text(content)
     note_hash = compute_note_hash(content)
-    preview = None if note.is_password_protected else make_preview(content)
 
     note.title = title
     note.ciphertext = ciphertext
     note.nonce = nonce
     note.note_hash = note_hash
-    note.content_preview = preview
 
     db.session.commit()
 
@@ -211,7 +197,6 @@ def set_note_password(note_id):
         password.encode("utf-8"),
         bcrypt.gensalt()
     ).decode("utf-8")
-    note.content_preview = None
 
     db.session.commit()
 
@@ -243,9 +228,6 @@ def remove_note_password(note_id):
 
     note.is_password_protected = False
     note.note_password_hash = None
-
-    content = decrypt_text(note.ciphertext, note.nonce)
-    note.content_preview = make_preview(content)
 
     db.session.commit()
 
